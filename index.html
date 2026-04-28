@@ -16,76 +16,75 @@
             overflow-x: hidden;
         }
 
-        /* Hero Section */
+        /* Hero Section - Foto grup sebagai background */
         .hero {
-            padding: 100px 20px;
+            /* Menyesuaikan ukuran agar foto terlihat proporsional dan penuh di layar */
+            min-height: 100vh;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* Overlay agar tulisan terbaca */
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), 
+            
+            /* Background foto dengan overlay gelap agar tulisan terbaca */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), 
                         url('toman-grup.jpeg'); 
+            
+            /* Pengaturan agar foto tidak gepeng dan selalu di tengah */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            
             border-bottom: 5px solid #ffde59;
             box-sizing: border-box;
         }
 
         h1 {
             font-family: 'Bebas Neue', cursive;
-            font-size: clamp(3.5rem, 15vw, 6.5rem); 
+            font-size: clamp(3.5rem, 12vw, 6rem); 
             margin: 0;
             color: #ffde59;
-            text-shadow: 0 0 20px rgba(255, 222, 89, 0.6), 2px 2px 10px #000;
+            text-shadow: 0 0 20px rgba(255, 222, 89, 0.6);
             letter-spacing: 5px;
             line-height: 1;
         }
 
         .subtitle {
-            font-size: clamp(1rem, 5vw, 1.8rem);
+            font-size: clamp(1rem, 4vw, 1.5rem);
             font-weight: bold;
             margin-top: 5px;
             letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 2px 2px 5px #000;
+            color: #ccc;
         }
 
+        /* Detail Section */
         .content {
             padding: 60px 20px;
-            background: #0f0f0f;
         }
 
+        /* Efek Glassmorphism untuk kartu */
         .card {
-            background: rgba(30, 30, 30, 0.85);
+            background: rgba(30, 30, 30, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 35px 25px;
+            padding: 30px;
             max-width: 450px;
             margin: 0 auto;
-            border: 1px solid rgba(255, 222, 89, 0.3);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255, 222, 89, 0.2);
         }
 
         .info-row {
-            margin: 25px 0;
+            margin: 20px 0;
             border-bottom: 1px dashed rgba(255, 222, 89, 0.2);
-            padding-bottom: 15px;
+            padding-bottom: 10px;
         }
 
         .info-row:last-child { border: none; }
 
-        .label { 
-            color: #ffde59; 
-            font-weight: bold; 
-            display: block; 
-            margin-bottom: 8px; 
-            text-transform: uppercase; 
-            font-size: 0.85rem; 
-        }
+        .label { color: #ffde59; font-weight: bold; display: block; margin-bottom: 5px; }
 
+        /* Animasi Tombol Pulse */
         @keyframes pulse-animation {
             0% { box-shadow: 0 0 0 0 rgba(255, 222, 89, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(255, 222, 89, 0); }
@@ -100,40 +99,36 @@
             text-decoration: none;
             font-weight: 800;
             border-radius: 50px;
-            margin-top: 15px;
+            margin-top: 20px;
             transition: all 0.3s ease;
             animation: pulse-animation 2s infinite;
-            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #fff;
+            box-shadow: 0 0 20px rgba(255, 222, 89, 0.8);
         }
 
         footer {
             padding: 40px;
             font-size: 0.8rem;
-            color: #666;
-        }
-
-        /* KHUSUS HP */
-        @media (max-width: 768px) {
-            .hero {
-                min-height: 100dvh; 
-                justify-content: flex-start; 
-                padding-top: 80px;
-                background-attachment: scroll; 
-            }
+            color: #555;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
     <section class="hero">
-        <p style="letter-spacing: 4px; margin-bottom: 5px; text-shadow: 2px 2px 5px #000; font-size: 0.8rem;">YOU ARE INVITED TO</p>
+        <p style="letter-spacing: 3px; margin-bottom: 10px;">YOU ARE INVITED TO</p>
         <h1>MABAR</h1>
         <p class="subtitle">(MABOK AKBAR)</p>
     </section>
 
     <section class="content">
         <div class="card">
-            <h2 style="color: #ffde59; margin-top: 0; font-family: 'Bebas Neue', cursive; font-size: 2.3rem;">Let's Get Tipsy Together!</h2>
+            <h2 style="color: #ffde59; margin-top: 0;">Let's Get Tipsy Together!</h2>
             <p>Merapat, curhat, dan pererat solidaritas kita di acara Makrab TOMAN tahun ini.</p>
             
             <div class="info-row">
