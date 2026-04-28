@@ -16,9 +16,9 @@
             overflow-x: hidden;
         }
 
-        /* ----- Hero Section (Tampilan Desktop/Laptop Default) ----- */
+        /* Hero Section */
         .hero {
-            padding: 100px 20px; /* Jarak asli agar tidak terlalu rapat */
+            padding: 100px 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -29,7 +29,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            
             border-bottom: 5px solid #ffde59;
             box-sizing: border-box;
         }
@@ -53,13 +52,11 @@
             text-shadow: 2px 2px 5px #000;
         }
 
-        /* Detail Section */
         .content {
             padding: 60px 20px;
             background: #0f0f0f;
         }
 
-        /* Efek Glassmorphism untuk Card */
         .card {
             background: rgba(30, 30, 30, 0.85);
             backdrop-filter: blur(10px);
@@ -89,7 +86,6 @@
             font-size: 0.85rem; 
         }
 
-        /* Animasi Tombol Pulse */
         @keyframes pulse-animation {
             0% { box-shadow: 0 0 0 0 rgba(255, 222, 89, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(255, 222, 89, 0); }
@@ -108,40 +104,21 @@
             transition: all 0.3s ease;
             animation: pulse-animation 2s infinite;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-            background: #fff;
-        }
-
-        /* footer */
         footer {
             padding: 40px;
             font-size: 0.8rem;
             color: #666;
-            background: #0f0f0f;
         }
 
-        /* ========================================================= */
-        /* ----- PERUBAHAN KHUSUS UNTUK HP (MAX-WIDTH 768px) ----- */
-        /* ========================================================= */
+        /* KHUSUS HP */
         @media (max-width: 768px) {
             .hero {
-                /* Membuat bagian foto menjadi FULL satu layar HP */
                 min-height: 100dvh; 
-                
-                /* Mengubah posisi teks agar nangkring di atas layar */
                 justify-content: flex-start; 
-                padding-top: 80px; /* Jarak agar teks pas di bagian atas layar */
-                
-                /* Memastikan foto tetap stabil dan penuh tanpa gepeng */
+                padding-top: 80px;
                 background-attachment: scroll; 
-            }
-
-            .card {
-                padding: 25px 20px;
             }
         }
     </style>
@@ -156,8 +133,8 @@
 
     <section class="content">
         <div class="card">
-            <h2 style="color: #ffde59; margin-top: 0; font-family: 'Bebas Neue', cursive; font-size: 2.3rem; letter-spacing: 1px;">Let's Get Tipsy Together!</h2>
-            <p style="color: #ddd; line-height: 1.6; margin-bottom: 30px;">Merapat, curhat, dan pererat solidaritas kita di acara Makrab TOMAN tahun ini.</p>
+            <h2 style="color: #ffde59; margin-top: 0; font-family: 'Bebas Neue', cursive; font-size: 2.3rem;">Let's Get Tipsy Together!</h2>
+            <p>Merapat, curhat, dan pererat solidaritas kita di acara Makrab TOMAN tahun ini.</p>
             
             <div class="info-row">
                 <span class="label">KAPAN?</span>
