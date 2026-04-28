@@ -6,9 +6,79 @@
     <title>MAKRAB TOMAN - MABAR</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
     <style>
+        /* ----- PRELOADER / SPLASH SCREEN ----- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease, visibility 1s;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* Canvas untuk animasi air */
+        #liquid-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .bottle-wrapper {
+            position: relative;
+            z-index: 20;
+            transition: transform 0.2s ease;
+        }
+
+        .bottle-img {
+            width: 250px; 
+            height: auto;
+            mix-blend-mode: screen; 
+            filter: drop-shadow(0 0 25px rgba(255, 222, 89, 0.4));
+            animation: shake 2.5s infinite ease-in-out;
+        }
+
+        .open-text {
+            margin-top: 30px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            color: #ffde59;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 222, 89, 0.5);
+            animation: blink 1.5s infinite;
+            position: relative;
+            z-index: 20;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(-8deg); }
+            40% { transform: rotate(8deg); }
+            60% { transform: rotate(-5deg); }
+            80% { transform: rotate(5deg); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* ----- CSS UTAMA ----- */
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Montserrat', sans-serif;
             background: #000000;
             color: white;
@@ -52,47 +122,23 @@
             text-shadow: 2px 2px 5px #000;
         }
 
-        /* ----- Gaya Timer ----- */
         .timer-container {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
+            display: flex; gap: 15px; margin-top: 30px;
             background: rgba(0, 0, 0, 0.6);
-            padding: 15px 25px;
-            border-radius: 15px;
+            padding: 15px 20px; border-radius: 15px;
             border: 1px solid rgba(255, 222, 89, 0.3);
             backdrop-filter: blur(5px);
         }
 
-        .timer-segment {
-            display: flex;
-            flex-direction: column;
-        }
+        .timer-segment { display: flex; flex-direction: column; }
+        .timer-value { font-family: 'Bebas Neue', cursive; font-size: 2rem; color: #ffde59; line-height: 1; }
+        .timer-label { font-size: 0.6rem; text-transform: uppercase; margin-top: 5px; }
 
-        .timer-value {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.5rem;
-            color: #ffde59;
-            line-height: 1;
-        }
-
-        .timer-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
-        /* ---------------------- */
-
-        .content {
-            padding: 60px 20px;
-            background: #0f0f0f;
-        }
+        .content { padding: 60px 20px; background: #0f0f0f; }
 
         .card {
             background: rgba(30, 30, 30, 0.85);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 35px 25px;
             max-width: 450px;
@@ -103,19 +149,12 @@
 
         .info-row {
             margin: 20px 0;
-            border-bottom: 1px dashed rgba(255, 222, 89, 0.2);
+            border-bottom: 1px dashed #444;
             padding-bottom: 10px;
         }
 
         .info-row:last-child { border: none; }
-
         .label { color: #ffde59; font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9rem; }
-
-        @keyframes pulse-animation {
-            0% { box-shadow: 0 0 0 0 rgba(255, 222, 89, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 222, 89, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 222, 89, 0); }
-        }
 
         .btn {
             display: inline-block;
@@ -126,17 +165,17 @@
             font-weight: 800;
             border-radius: 50px;
             margin-top: 20px;
-            transition: all 0.3s ease;
             animation: pulse-animation 2s infinite;
             text-transform: uppercase;
         }
 
-        footer {
-            padding: 40px;
-            font-size: 0.8rem;
-            color: #666;
-            letter-spacing: 1px;
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(255, 222, 89, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 222, 89, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 222, 89, 0); }
         }
+
+        footer { padding: 40px; font-size: 0.8rem; color: #666; }
 
         @media (min-width: 1024px) {
             .hero { background-size: cover; }
@@ -145,28 +184,24 @@
 </head>
 <body>
 
+    <div id="preloader" onclick="handleBottleClick(event)">
+        <canvas id="liquid-canvas"></canvas>
+        <div class="bottle-wrapper" id="bottle">
+            <img src="botol.jpg" alt="Intisari" class="bottle-img">
+        </div>
+        <p class="open-text" id="open-text">CLICK TO OPEN BOTTLE</p>
+    </div>
+
     <section class="hero">
-        <p style="letter-spacing: 3px; margin-bottom: 10px; text-shadow: 2px 2px 5px #000;">YOU ARE INVITED TO</p>
+        <p style="letter-spacing: 3px; margin-bottom: 10px;">YOU ARE INVITED TO</p>
         <h1>MABAR</h1>
         <p class="subtitle">(MABOK AKBAR)</p>
 
         <div class="timer-container">
-            <div class="timer-segment">
-                <span class="timer-value" id="days">00</span>
-                <span class="timer-label">Hari</span>
-            </div>
-            <div class="timer-segment">
-                <span class="timer-value" id="hours">00</span>
-                <span class="timer-label">Jam</span>
-            </div>
-            <div class="timer-segment">
-                <span class="timer-value" id="minutes">00</span>
-                <span class="timer-label">Menit</span>
-            </div>
-            <div class="timer-segment">
-                <span class="timer-value" id="seconds">00</span>
-                <span class="timer-label">Detik</span>
-            </div>
+            <div class="timer-segment"><span class="timer-value" id="days">00</span><span class="timer-label">Hari</span></div>
+            <div class="timer-segment"><span class="timer-value" id="hours">00</span><span class="timer-label">Jam</span></div>
+            <div class="timer-segment"><span class="timer-value" id="minutes">00</span><span class="timer-label">Menit</span></div>
+            <div class="timer-segment"><span class="timer-value" id="seconds">00</span><span class="timer-label">Detik</span></div>
         </div>
     </section>
 
@@ -174,57 +209,104 @@
         <div class="card">
             <h2 style="color: #ffde59; margin-top: 0; font-family: 'Bebas Neue', cursive; font-size: 2.2rem;">Let's Get Tipsy Together!</h2>
             <p>Merapat, curhat, dan pererat solidaritas kita di acara Makrab TOMAN.</p>
-            
-            <div class="info-row">
-                <span class="label">KAPAN?</span>
-                Sabtu - Minggu, 20-21 Juni 2026
-            </div>
-
-            <div class="info-row">
-                <span class="label">DI MANA?</span>
-                Villa
-            </div>
-
-            <div class="info-row">
-                <span class="label">HTM</span>
-                TBA
-            </div>
-
+            <div class="info-row"><span class="label">KAPAN?</span>Sabtu - Minggu, 20-21 Juni 2026</div>
+            <div class="info-row"><span class="label">DI MANA?</span>Villa</div>
+            <div class="info-row"><span class="label">HTM</span>TBA</div>
             <a href="https://forms.gle/KRBkvwjev5GhBfRn7" class="btn">KONFIRMASI KEHADIRAN</a>
         </div>
     </section>
 
-    <footer>
-        &copy; 2026 TOMAN. No Drama, Just Drinks.
-    </footer>
+    <footer>&copy; 2026 TOMAN. No Drama, Just Drinks.</footer>
 
     <script>
-        // Set tanggal tujuan (20 Juni 2026 jam 15:00 WIB)
-        const targetDate = new Date("June 20, 2026 15:00:00").getTime();
+        const canvas = document.getElementById('liquid-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-        const updateTimer = setInterval(function() {
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 4;
+                this.speedX = Math.random() * 10 - 5;
+                this.speedY = Math.random() * -15 - 5;
+                this.gravity = 0.5;
+                this.color = '#ffde59'; // Warna kuning air Intisari
+                this.alpha = 1;
+            }
+            update() {
+                this.speedY += this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.alpha > 0.02) this.alpha -= 0.02;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function createSplash(x, y) {
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function handleBottleClick(e) {
+            const bottle = document.getElementById('bottle');
+            const rect = bottle.getBoundingClientRect();
+            // Splash keluar dari area tutup botol
+            createSplash(rect.left + rect.width / 2, rect.top);
+            
+            // Animasi botol mengecil sebentar
+            bottle.style.transform = 'scale(0.9)';
+            document.getElementById('open-text').style.display = 'none';
+
+            setTimeout(() => {
+                document.getElementById("preloader").classList.add("hidden");
+            }, 800);
+        }
+
+        // Timer Countdown
+        const targetDate = new Date("June 20, 2026 15:00:00").getTime();
+        setInterval(function() {
             const now = new Date().getTime();
             const distance = targetDate - now;
-
-            // Perhitungan waktu
             const d = Math.floor(distance / (1000 * 60 * 60 * 24));
             const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Masukkan ke elemen HTML
-            document.getElementById("days").innerHTML = d < 10 ? "0" + d : d;
-            document.getElementById("hours").innerHTML = h < 10 ? "0" + h : h;
-            document.getElementById("minutes").innerHTML = m < 10 ? "0" + m : m;
-            document.getElementById("seconds").innerHTML = s < 10 ? "0" + s : s;
-
-            // Jika waktu habis
-            if (distance < 0) {
-                clearInterval(updateTimer);
-                document.querySelector(".timer-container").innerHTML = "<span class='timer-value'>WAKTUNYA MABAR!</span>";
-            }
+            document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+            document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
         }, 1000);
     </script>
-
 </body>
 </html>
