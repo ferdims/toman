@@ -10,38 +10,32 @@
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
-            background: #000000; /* Hitam pekat agar menyatu dengan foto */
+            background: #000000;
             color: white;
             text-align: center;
             overflow-x: hidden;
         }
 
-        /* Hero Section - Dioptimalkan untuk HP agar foto utuh & teks di tengah */
         .hero {
-            min-height: 100dvh; /* Tinggi satu layar penuh */
+            min-height: 100dvh;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Teks tetap di tengah layar */
+            justify-content: center;
             align-items: center;
-            
-            /* Background foto */
             background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), 
                               url('toman-grup.jpeg'); 
-            
-            /* Pengaturan agar foto utuh di HP */
-            background-size: contain; /* Foto mengecil sampai muat di layar (tidak terpotong) */
-            background-position: center; /* Foto di tengah */
+            background-size: contain;
+            background-position: center;
             background-repeat: no-repeat;
-            background-color: #000; /* Area kosong di atas/bawah jadi hitam */
-            
+            background-color: #000;
             border-bottom: 5px solid #ffde59;
             box-sizing: border-box;
         }
 
         h1 {
             font-family: 'Bebas Neue', cursive;
-            font-size: clamp(3rem, 12vw, 6rem); 
+            font-size: clamp(3.5rem, 12vw, 6.5rem); 
             margin: 0;
             color: #ffde59;
             text-shadow: 0 0 20px rgba(255, 222, 89, 0.6), 2px 2px 10px #000;
@@ -58,13 +52,43 @@
             text-shadow: 2px 2px 5px #000;
         }
 
-        /* Detail Section */
+        /* ----- Gaya Timer ----- */
+        .timer-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 222, 89, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .timer-segment {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timer-value {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: #ffde59;
+            line-height: 1;
+        }
+
+        .timer-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        /* ---------------------- */
+
         .content {
             padding: 60px 20px;
             background: #0f0f0f;
         }
 
-        /* Kartu dengan efek transparan */
         .card {
             background: rgba(30, 30, 30, 0.85);
             backdrop-filter: blur(10px);
@@ -87,7 +111,6 @@
 
         .label { color: #ffde59; font-weight: bold; display: block; margin-bottom: 5px; font-size: 0.9rem; }
 
-        /* Tombol */
         @keyframes pulse-animation {
             0% { box-shadow: 0 0 0 0 rgba(255, 222, 89, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(255, 222, 89, 0); }
@@ -108,11 +131,6 @@
             text-transform: uppercase;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-            background: #fff;
-        }
-
         footer {
             padding: 40px;
             font-size: 0.8rem;
@@ -120,11 +138,8 @@
             letter-spacing: 1px;
         }
 
-        /* Penyesuaian khusus Laptop/Desktop */
         @media (min-width: 1024px) {
-            .hero {
-                background-size: cover; /* Di laptop lebih bagus kalau penuh */
-            }
+            .hero { background-size: cover; }
         }
     </style>
 </head>
@@ -134,6 +149,25 @@
         <p style="letter-spacing: 3px; margin-bottom: 10px; text-shadow: 2px 2px 5px #000;">YOU ARE INVITED TO</p>
         <h1>MABAR</h1>
         <p class="subtitle">(MABOK AKBAR)</p>
+
+        <div class="timer-container">
+            <div class="timer-segment">
+                <span class="timer-value" id="days">00</span>
+                <span class="timer-label">Hari</span>
+            </div>
+            <div class="timer-segment">
+                <span class="timer-value" id="hours">00</span>
+                <span class="timer-label">Jam</span>
+            </div>
+            <div class="timer-segment">
+                <span class="timer-value" id="minutes">00</span>
+                <span class="timer-label">Menit</span>
+            </div>
+            <div class="timer-segment">
+                <span class="timer-value" id="seconds">00</span>
+                <span class="timer-label">Detik</span>
+            </div>
+        </div>
     </section>
 
     <section class="content">
@@ -163,6 +197,34 @@
     <footer>
         &copy; 2026 TOMAN. No Drama, Just Drinks.
     </footer>
+
+    <script>
+        // Set tanggal tujuan (20 Juni 2026 jam 15:00 WIB)
+        const targetDate = new Date("June 20, 2026 15:00:00").getTime();
+
+        const updateTimer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            // Perhitungan waktu
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Masukkan ke elemen HTML
+            document.getElementById("days").innerHTML = d < 10 ? "0" + d : d;
+            document.getElementById("hours").innerHTML = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").innerHTML = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").innerHTML = s < 10 ? "0" + s : s;
+
+            // Jika waktu habis
+            if (distance < 0) {
+                clearInterval(updateTimer);
+                document.querySelector(".timer-container").innerHTML = "<span class='timer-value'>WAKTUNYA MABAR!</span>";
+            }
+        }, 1000);
+    </script>
 
 </body>
 </html>
