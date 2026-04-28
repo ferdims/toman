@@ -55,22 +55,23 @@
             z-index: 20;
         }
 
-        /* Styling untuk gambar pop-up muka abah */
         .abah-popup {
             position: fixed;
-            width: 150px; /* Sesuaikan ukuran gambar */
+            width: 150px;
             height: auto;
-            z-index: 15; /* Di bawah botol, di atas partikel */
+            z-index: 15;
             pointer-events: none;
-            border-radius: 50%; /* Membuat gambar lingkaran jika kotak */
+            border-radius: 50%;
             box-shadow: 0 0 20px rgba(255, 222, 89, 0.7);
-            animation: popOutImage 0.8s ease-out forwards;
+            /* Animasi diperpanjang sedikit agar tidak langsung hilang */
+            animation: popQuick 0.7s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards;
         }
 
-        @keyframes popOutImage {
-            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: scale(1.2) rotate(15deg); opacity: 0; }
+        @keyframes popQuick {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            30% { opacity: 1; transform: scale(1.2) rotate(10deg); }
+            70% { opacity: 1; transform: scale(1.1) rotate(0deg); }
+            100% { transform: scale(0.8) translateY(-20px); opacity: 0; }
         }
 
         @keyframes shake {
@@ -199,6 +200,8 @@
 </head>
 <body>
 
+    <audio id="pop-sound" src="freesound_community-pop-91931.mp3" preload="auto"></audio>
+
     <div id="preloader" onclick="handleBottleClick(event)">
         <canvas id="liquid-canvas"></canvas>
         <div class="bottle-wrapper" id="bottle">
@@ -227,7 +230,7 @@
             <div class="info-row"><span class="label">KAPAN?</span>Sabtu - Minggu, 20-21 Juni 2026</div>
             <div class="info-row"><span class="label">DI MANA?</span>Villa</div>
             <div class="info-row"><span class="label">HTM</span>TBA</div>
-            <a href="https://forms.gle/QeAo8PDnWv3yGBgC7" class="btn">KONFIRMASI KEHADIRAN</a>
+            <a href="https://forms.gle/KRBkvwjev5GhBfRn7" class="btn">KONFIRMASI KEHADIRAN</a>
         </div>
     </section>
 
@@ -297,41 +300,48 @@
             const bottle = document.getElementById('bottle');
             const rect = bottle.getBoundingClientRect();
             const preloader = document.getElementById('preloader');
+            const audio = document.getElementById('pop-sound');
+            
+            audio.play().catch(err => console.log("Audio gagal:", err));
             
             createSplash(rect.left + rect.width / 2, rect.top);
             
-            // Membuat pop-up gambar muka abah secara acak
-            for (let i = 0; i < 8; i++) { // Jumlah gambar yang muncul
+            // Mengambil durasi asli audio (jika file belum load sempurna, default ke 1000ms)
+            const soundDuration = (audio.duration * 1000) || 1000; 
+            const totalPopUps = 18; // Jumlah muka yang akan meledak
+            const interval = soundDuration / totalPopUps;
+
+            // Loop untuk memunculkan muka Abah selama suara sound berjalan
+            for (let i = 0; i < totalPopUps; i++) { 
                 setTimeout(() => {
                     const img = document.createElement('img');
-                    img.src = "abah.png"; // Pastikan file ini ada
+                    img.src = "abah.png"; 
                     img.className = 'abah-popup';
                     
-                    // Posisi acak di area preloader
-                    img.style.left = Math.random() * 70 + 15 + '%';
-                    img.style.top = Math.random() * 70 + 15 + '%';
+                    // Posisi acak di tengah layar
+                    img.style.left = Math.random() * 60 + 20 + '%';
+                    img.style.top = Math.random() * 60 + 20 + '%';
                     
-                    // Ukuran acak sedikit agar bervariasi
-                    const randomSize = Math.random() * 50 + 120; // antara 120px hingga 170px
+                    const randomSize = Math.random() * 40 + 130; 
                     img.style.width = randomSize + 'px';
 
                     preloader.appendChild(img);
 
-                    // Hapus elemen setelah animasi selesai agar tidak menumpuk di DOM
+                    // Gambar dihapus setelah animasi selesai
                     setTimeout(() => {
                         img.remove();
-                    }, 800); // Harus sama atau lebih lama dari durasi animasi CSS
+                    }, 700); 
 
-                }, i * 80); // Jeda waktu muncul antar gambar
+                }, i * interval);
             }
 
-            bottle.style.transform = 'scale(0.9)';
+            bottle.style.transform = 'scale(0.8)';
             document.getElementById('open-text').style.display = 'none';
 
-            // Beri waktu sedikit lebih lama agar gambar sempat terlihat sebelum transisi
+            // Preloader akan tertutup PERSIS setelah durasi audio habis
             setTimeout(() => {
-                document.getElementById("preloader").classList.add("hidden");
-            }, 1500); 
+                preloader.classList.add("hidden");
+            }, soundDuration); 
         }
 
         const targetDate = new Date("June 20, 2026 00:00:00").getTime();
